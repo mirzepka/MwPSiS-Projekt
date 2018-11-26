@@ -1,0 +1,40 @@
+/* Input data */
+data;
+
+param V_count := 4;   /*- liczba node'ow */
+param E_count := 4;   /*- liczba krawędzi */
+param D_count := 2;    /*- liczba zapotrzebowac - ilosc gosci ktorych chcemy wyslac */
+
+param : h  s t := /*- definicja zapotrzebowan */
+ 1      600 1 4   /*- h:ilosc gosciu ktorych wysylamy */
+ 2      100 1 4    /*- s:source */
+;                 /*- t:destination */
+
+param : A :=
+ 1,1    1 /*- 1st:numer łuku, porządkowe */
+ 2,1    1 /*- 2nd:początek łuku */
+ 3,2    1 /*- 3th:zawsze 1 , reszta rowna 0 */
+ 4,3    1
+;  
+
+param : B :=
+ 1,2    1 /*- 1st:numer łuku, porządkowe */
+ 2,3    1 /*- 2nd:koniec łuku */
+ 3,4    1 /*- 3th:zawsze 1 , reszta rowna 0 */
+ 4,4    1
+;
+
+param : KSI := 
+ 1      10 /*- 1st:numer łuku */
+ 2      15 /*- 2nd:koszt */
+ 3      20
+ 4      25
+;
+
+param : c := /*Capacity*/
+ 1      100 /*- 1st:numer łuku */
+ 2      400 /*- 2nd:koszt */
+ 3      100
+ 4      400
+;
+end;
