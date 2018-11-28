@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 
 using namespace std;
@@ -12,67 +13,72 @@ int main(int argc, char** argv)
     int edgeNum = 1;
     cout << "Gen: " << R << "x" << R << endl << endl;
 
-    cout << "data;" << endl << endl;
-    cout << "param V_count := " << R*R << ";" << endl;
-    cout << "param E_count := " << 3*(R-1)*(R-1) << ";" << endl;
-    cout << "param D_count := 2" << endl;
+    ofstream file;
+    file.open ("data.dat");
 
-    cout << "param : h  s t := " << endl;
-    cout << " 1      50 1 " << R*R << endl;
-    cout << endl;
+    file << "data;" << endl << endl;
+    file << "param V_count := " << R*R << ";" << endl;
+    file << "param E_count := " << 3*(R-1)*(R-1) << ";" << endl;
+    file << "param D_count := 2" << endl;
+
+    file << "param : h  s t := " << endl;
+    file << " 1      50 1 " << R*R << endl;
+    file << endl;
 
     edgeNum = 1;
-    cout << "param : A :=" << endl;
+    file << "param : A :=" << endl;
     for(int y = 0; y<(R-1); ++y)
     {
         for(int x = 0; x<(R-1); ++x)
         {
-            cout << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
-            cout << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
-            cout << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
+            file << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
+            file << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
+            file << " " << edgeNum++ << ", " << y*R+(x+1) << "    1" << endl;
         }
     }
-    cout << ";" << endl;
+    file << ";" << endl;
 
     edgeNum = 1;
-    cout << "param : B :=" << endl;
+    file << "param : B :=" << endl;
     for(int y = 0; y<(R-1); ++y)
     {
         for(int x = 0; x<(R-1); ++x)
         {
-            cout << " " << edgeNum++ << ", " << y*R+(x+1)+1 << "    1" << endl;
-            cout << " " << edgeNum++ << ", " << (y+1)*R+(x+1)+1 << "    1" << endl;
-            cout << " " << edgeNum++ << ", " << (y+1)*R+(x+1) << "    1" << endl;
+            file << " " << edgeNum++ << ", " << y*R+(x+1)+1 << "    1" << endl;
+            file << " " << edgeNum++ << ", " << (y+1)*R+(x+1)+1 << "    1" << endl;
+            file << " " << edgeNum++ << ", " << (y+1)*R+(x+1) << "    1" << endl;
         }
     }
-    cout << ";" << endl;
+    file << ";" << endl;
 
     edgeNum = 1;
-    cout << "param : KSI :=" << endl;
+    file << "param : KSI :=" << endl;
     for(int y = 0; y<(R-1); ++y)
     {
         for(int x = 0; x<(R-1); ++x)
         {
-            cout << " " << edgeNum++ << "      20" << endl;
-            cout << " " << edgeNum++ << "      20" << endl;
-            cout << " " << edgeNum++ << "      20" << endl;
+            file << " " << edgeNum++ << "      20" << endl;
+            file << " " << edgeNum++ << "      20" << endl;
+            file << " " << edgeNum++ << "      20" << endl;
         }
     }
-    cout << ";" << endl;
+    file << ";" << endl;
 
     edgeNum = 1;
-    cout << "param : c :=" << endl;
+    file << "param : c :=" << endl;
     for(int y = 0; y<(R-1); ++y)
     {
         for(int x = 0; x<(R-1); ++x)
         {
-            cout << " " << edgeNum++ << "      40" << endl;
-            cout << " " << edgeNum++ << "      40" << endl;
-            cout << " " << edgeNum++ << "      40" << endl;
+            file << " " << edgeNum++ << "      40" << endl;
+            file << " " << edgeNum++ << "      40" << endl;
+            file << " " << edgeNum++ << "      40" << endl;
         }
     }
-    cout << ";" << endl;
-    cout << "end;" << endl;
+    file << ";" << endl;
+    file << "end;" << endl;
+
+    file.close();
 
     return 0;
 }
