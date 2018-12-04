@@ -13,7 +13,7 @@ private:
 public:
     Graph(int vertexCount);
     ~Graph();
-    void addEdgeDirectedWeight(int i, int j, int cost, int seats);
+    void addEdgeDirectedWeight(int i, int j, int cost, int costPremium, int seats);
     void removeEdgeUndirected(int i, int j);
     int isEdge(int i, int j);
     void display();

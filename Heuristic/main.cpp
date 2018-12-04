@@ -1,52 +1,64 @@
 #include <iostream>
 #include <vector>
 #include "dijkstra.h"
+#include "FileParser.h"
 
 using namespace std;
 
 typedef vector<int> FlightList;
 
-void buildGraph(Graph & g);
-void buildFlightList(FlightList & flightList);
+void buildGraph(Graph & g, std::map<int, Edge> & edges);
+//void buildFlightList(FlightList & flightList, std::vector<Demand> demands);
 
 
 int main(){
 
-    Graph g(5);
-    buildGraph(g);
-
-    FlightList flightList;
-    buildFlightList(flightList);
-
-    int startNode = 0;
-
-    for(FlightList::iterator it = flightList.begin(); it != flightList.end(); ++it)
+    FileParser parser("../ModelDataGenerator/data.dat");
+    if (false == parser.init())
     {
-        g.bookTicket(startNode, *it);
+        cout << "Failed to init parser" << endl;
+	return -1;
     }
+    auto & edges = parser.getEdges();
+    auto & demands= parser.getDemands();
+//    int numOfEdges = parser.getNumberOfEdges();
+    int numOfNodes = parser.getNumberOfNodes();
+//    int numOfDemands = parser.getNumberOfDemands();
+
+    for_each(edges.begin(), edges.end(), [](pair<const int, Edge> & el){ cout << el.second.print(); });
+
+    Graph g(numOfNodes);
+    buildGraph(g, edges);
+
+//    FlightList flightList;
+//    buildFlightList(flightList, demands);
+
+
+    for(auto demand = demands.begin(); demand != demands.end(); ++demand)
+    {
+        for(int ticket = 0; ticket < demand->peop; ++ticket)
+	{
+            g.bookTicket(demand->start, demand->dest);
+	}
+    } 
+//    for(FlightList::iterator it = flightList.begin(); it != flightList.end(); ++it)
+//    {
+//        g.bookTicket(startNode, *it);
+//    }
     return 0;
 
 }
 
-void buildGraph(Graph & g)
+void buildGraph(Graph & g, map<int, Edge> & edges)
 {
-    g.addEdgeDirectedWeight(0, 1, 10, 1);
-    g.addEdgeDirectedWeight(0, 3, 5,  1);
-    g.addEdgeDirectedWeight(1, 2, 1,  3);
-    g.addEdgeDirectedWeight(1, 3, 2,  1);
-    g.addEdgeDirectedWeight(2, 4, 4,  4);
-    g.addEdgeDirectedWeight(3, 1, 3,  1);
-    g.addEdgeDirectedWeight(3, 2, 9,  1);
-    g.addEdgeDirectedWeight(3, 4, 2,  1);
-    g.addEdgeDirectedWeight(4, 0, 7,  1);
-    g.addEdgeDirectedWeight(4, 2, 6,  1);
+    for_each(edges.begin(), edges.end(), [&g](pair<const int, Edge> & p) 
+		    { g.addEdgeDirectedWeight(p.second.s, p.second.t, p.second.ksi, p.second.ksi_p, p.second.capa); }); 
 
     g.initializeState();
 }
 
-void buildFlightList(FlightList & flightList)
-{
-    flightList.push_back(4);
-    flightList.push_back(4);
-}
+//void buildFlightList(FlightList & flightList, std::vector<Demand> demands)
+//{
+//    for_each(demands.begin(), demands.end(), [&flightList](Demand & demand){ flightList.push_back(demand.dest); });
+//}
 

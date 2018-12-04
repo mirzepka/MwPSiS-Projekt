@@ -36,7 +36,7 @@ void Graph::initializeState(){
                                //
     }
 }
-void Graph::addEdgeDirectedWeight(int i, int j, int cost, int seats) {
+void Graph::addEdgeDirectedWeight(int i, int j, int cost, int costPremium, int seats) {
     if (i >= 0 && i < vertexCount && j >= 0 && j < vertexCount) {
         adjMatrix[i][j] = make_pair(cost, seats);
     }
