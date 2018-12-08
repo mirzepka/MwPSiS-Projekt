@@ -1,0 +1,57 @@
+sudo apt-get install apache2
+sudo apt-get install curl
+cd /etc/apache2/mods-enabled
+sudo ln -s ../mods-available/cgi.load
+sudo service apache2 reload
+sudo vim /usr/lib/cgi-bin/mwpsis.sh
+wkleic
+
+#!/bin/bash
+
+echo "Content-type: text/html"
+echo ""
+
+echo '<html>'
+echo '<head>'
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+echo '<title>Form Example</title>'
+echo '</head>'
+echo '<body>'
+
+  echo "<form method=GET action=\"${SCRIPT}\">"\
+       '<table nowrap>'\
+          '<tr><td>Liczba lotnisk</td><td><input type="text" name="val_y" size=12 value=""></td>'\
+          '</tr></table>'
+
+  echo '<br><input type="submit" value="Start">'\
+       '<input type="reset" value="Reset"></form>'
+
+  # Make sure we have been invoked properly.
+
+  if [ "$REQUEST_METHOD" != "GET" ]; then
+        echo "<hr>Script Error:"\
+             "<br>Usage error, cannot complete request, REQUEST_METHOD!=GET."\
+             "<br>Check your FORM declaration and be sure to use METHOD=\"GET\".<hr>"
+        exit 1
+  fi
+
+  # If no search arguments, exit gracefully now.
+
+  if [ -z "$QUERY_STRING" ]; then
+        exit 0
+  else
+     # No looping this time, just extract the data you are looking for with sed:
+     YY=`echo "$QUERY_STRING" | sed -n 's/^.*val_y=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
+     source /home/pat/MwPSiS-projekt/setup.sh "$YY"
+  fi
+echo '</body>'
+echo '</html>'
+
+exit 0
+
+====================================
+
+sudo chmod +x /usr/lib/cgi-bin/mwpsis.sh
+
+w przegladarce:
+http://127.0.0.1/cgi-bin/mwpsis.sh
