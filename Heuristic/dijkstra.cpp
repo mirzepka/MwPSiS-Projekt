@@ -16,11 +16,11 @@ Graph::Graph(int vertexCount) {
     this->distance = new int[vertexCount];
     this->parent = new int[vertexCount];
 
-    adjMatrix = new pair<int,int>*[vertexCount];
+    adjMatrix = new pair<Costs,int>*[vertexCount];
     for (int i = 0; i < vertexCount; i++) {
-        adjMatrix[i] = new pair<int, int>[vertexCount];
+        adjMatrix[i] = new pair<Costs, int>[vertexCount];
            for (int j = 0; j < vertexCount; j++)
-              adjMatrix[i][j] = make_pair(0,0);
+              adjMatrix[i][j] = make_pair(Costs(),0);
     }
 }
 Graph::~Graph() {
@@ -38,13 +38,13 @@ void Graph::initializeState(){
 }
 void Graph::addEdgeDirectedWeight(int i, int j, int cost, int costPremium, int seats) {
     if (i >= 0 && i < vertexCount && j >= 0 && j < vertexCount) {
-        adjMatrix[i][j] = make_pair(cost, seats);
+        adjMatrix[i][j] = make_pair(Costs(cost, costPremium), seats);
     }
 }
 void Graph::removeEdgeUndirected(int i, int j) {
     if (i >= 0 && i < vertexCount && j >= 0 && j < vertexCount) {
-        adjMatrix[i][j] = make_pair(0, 0);
-        adjMatrix[j][i] = make_pair(0, 0);
+        adjMatrix[i][j] = make_pair(Costs(), 0);
+        adjMatrix[j][i] = make_pair(Costs(), 0);
     }
 }
 int Graph::isEdge(int i, int j) {
@@ -55,7 +55,7 @@ int Graph::isEdge(int i, int j) {
     }
     else if (i >= 0 && i < vertexCount && j >= 0 && j < vertexCount)
     {
-         return adjMatrix[i][j].first;
+         return adjMatrix[i][j].first.regularCost;
     }
     else{
         cout<<"Invalid vertex number.\n";
@@ -71,7 +71,7 @@ void Graph::display(){
     for(u=0; u<vertexCount; u++) {
         cout << "\nNode[" << (char) (u+48) << "] -> ";
         for(v=0; v<vertexCount; ++v) {
-            cout << setw(2) << adjMatrix[u][v].first << " " ;
+            cout << setw(2) << adjMatrix[u][v].first.regularCost << " " ;
         }
     }
     cout<<"\n\nTickets    ";
@@ -115,10 +115,11 @@ int Graph::findMinDistanceNode(){
     //cout<<"Min Distant Node: "<<minDistantNode<<" Cost: "<<minDistant<<"\n";
     return minDistantNode;
 }
-void Graph::bookTicket(int startNode, int destinationNode)
+int Graph::bookTicket(int startNode, int destinationNode, bool premiumTicket)
 {
+    int ticketsCost = 0;
     display();
-    Dijkstra(startNode);
+    Dijkstra(startNode, premiumTicket);
 
     deque<int> v = printPath(destinationNode);
 
@@ -127,8 +128,14 @@ void Graph::bookTicket(int startNode, int destinationNode)
     for(deque<int>::iterator it2 = v.begin(); (it2+1) < v.end(); ++it2)
     {
         //cout <<"To be decreased: " << *it2 << "->" << *(it2+1) << " Value : " << g.adjMatrix[*it2][*(it2+1)].second << endl;
+        ticketsCost += adjMatrix[*it2][*(it2+1)].first.regularCost;
+	if (premiumTicket)
+	{
+            ticketsCost += adjMatrix[*it2][*(it2+1)].first.premiumCost;
+	}
         adjMatrix[*it2][*(it2+1)].second = adjMatrix[*it2][*(it2+1)].second - 1;
     }
+    return ticketsCost;
 }
 deque<int> Graph::printPath(int j)
 {
@@ -144,7 +151,7 @@ deque<int> Graph::printPath(int j)
     v.push_back(j);
     return v;
 }
-void Graph::Dijkstra(int startNode){
+void Graph::Dijkstra(int startNode, bool premiumTicket){
     for(int i = 0; i < vertexCount; ++i) // not sure if needed
     {
         this->key[i] = 0;
@@ -170,12 +177,24 @@ void Graph::Dijkstra(int startNode){
         for(i=0; i<vertexCount; i++){
             if(this->isEdge(minDistanceNode, i) && this->key[i]==0 ){
                 //Below is the code for relaxation
-                if(this->distance[i] > this->distance[minDistanceNode]
-                                       + adjMatrix[minDistanceNode][i].first){
-                    this->distance[i] = this->distance[minDistanceNode]
-                                        + adjMatrix[minDistanceNode][i].first;
-                    this->parent[i] = minDistanceNode;
-                }
+		if(premiumTicket)
+		{
+                    if(this->distance[i] > this->distance[minDistanceNode]
+                                           + adjMatrix[minDistanceNode][i].first.premiumCost){
+                        this->distance[i] = this->distance[minDistanceNode]
+                                            + adjMatrix[minDistanceNode][i].first.premiumCost;
+                        this->parent[i] = minDistanceNode;
+                    }
+		}
+		else
+		{
+                    if(this->distance[i] > this->distance[minDistanceNode]
+                                           + adjMatrix[minDistanceNode][i].first.regularCost){
+                        this->distance[i] = this->distance[minDistanceNode]
+                                            + adjMatrix[minDistanceNode][i].first.regularCost;
+                        this->parent[i] = minDistanceNode;
+                    }
+		}
             }
         }
 

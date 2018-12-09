@@ -1,8 +1,14 @@
 #include <deque>
 
+struct Costs{
+	int regularCost;
+	int premiumCost;
+	Costs(int cost = 0, int premCost = 0):regularCost(cost), premiumCost(premCost)
+	{}
+};
 class Graph {
 private:
-    std::pair<int, int> **adjMatrix;
+    std::pair<Costs, int> **adjMatrix;
     int vertexCount;
     // below attributes are for Prims
 
@@ -20,10 +26,10 @@ public:
     void initializeState();
     std::deque<int> printPath(int j);
     void showBasicInfo();
-    void Dijkstra(int startNode);
+    void Dijkstra(int startNode, bool premiumTicket);
     int isAllKeyTrue();  //0 means not MST, 1 means MST
     int findMinDistanceNode();
-    void bookTicket(int startNode, int destinationNode);
+    int bookTicket(int startNode, int destinationNode, bool premiumTicket = false);
 
 };
 

@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     file << "param D_count := 1;" << endl;
 
     file << "param : h  s t b := " << endl;
-    file << " 1      20 1 4 1" << endl;
+    file << " 1      2 1 4 1" << endl;
     file << ";" << endl;
 
     edgeIt = 1;
@@ -134,18 +134,18 @@ int main(int argc, char** argv)
         {
 	    if ( x < R-1 )
 	    {	    
-            	file << " " << edgeIt++ << "      40" << endl;
-            	file << " " << edgeIt++ << "      40" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
 	    }
 	    if ( x < R-1 && y < R-1 )
 	    {	    
-            	file << " " << edgeIt++ << "      40" << endl;
-            	file << " " << edgeIt++ << "      40" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
 	    }
 	    if ( y < R-1 )
 	    {	    
-            	file << " " << edgeIt++ << "      40" << endl;
-            	file << " " << edgeIt++ << "      40" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
+            	file << " " << edgeIt++ << "      1" << endl;
 	    }
         }
     }

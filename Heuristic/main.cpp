@@ -8,12 +8,15 @@ using namespace std;
 typedef vector<int> FlightList;
 
 void buildGraph(Graph & g, std::map<int, Edge> & edges);
-//void buildFlightList(FlightList & flightList, std::vector<Demand> demands);
 
 
-int main(){
-
+int main(int argc, char** argv)
+{
     FileParser parser("../ModelDataGenerator/data.dat");
+
+    if(argc > 1)
+        parser = string(argv[1]);
+
     if (false == parser.init())
     {
         cout << "Failed to init parser" << endl;
@@ -30,21 +33,21 @@ int main(){
     Graph g(numOfNodes);
     buildGraph(g, edges);
 
-//    FlightList flightList;
-//    buildFlightList(flightList, demands);
 
 
+    int totalCost = 0;
     for(auto demand = demands.begin(); demand != demands.end(); ++demand)
     {
         for(int ticket = 0; ticket < demand->peop; ++ticket)
 	{
-            g.bookTicket(demand->start, demand->dest);
+            int re = g.bookTicket(demand->start, demand->dest, ticket < demand->prem);
+	    cout<<"TicketsCosts: "<< re<< endl;
+	    totalCost += re;
 	}
     } 
-//    for(FlightList::iterator it = flightList.begin(); it != flightList.end(); ++it)
-//    {
-//        g.bookTicket(startNode, *it);
-//    }
+    cout << endl << "FINAL_LOG:Heuristic:" << endl;
+    cout << "FINAL_LOG:TotalCost: " << totalCost << endl;
+
     return 0;
 
 }
@@ -56,9 +59,4 @@ void buildGraph(Graph & g, map<int, Edge> & edges)
 
     g.initializeState();
 }
-
-//void buildFlightList(FlightList & flightList, std::vector<Demand> demands)
-//{
-//    for_each(demands.begin(), demands.end(), [&flightList](Demand & demand){ flightList.push_back(demand.dest); });
-//}
 
