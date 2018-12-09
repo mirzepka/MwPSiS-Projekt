@@ -55,3 +55,45 @@ sudo chmod +x /usr/lib/cgi-bin/mwpsis.sh
 
 w przegladarce:
 http://127.0.0.1/cgi-bin/mwpsis.sh
+
+
+
+sudo vim /usr/lib/cgi-bin/upload.sh
+
+#!/bin/bash
+
+echo "Content-type: text/html"
+echo ""
+
+echo '<html>'
+echo '<head>'
+echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+echo '<title>Foo</title>'
+echo '</head>'
+echo '<body>'
+
+
+if [ "$REQUEST_METHOD" = "POST" ]; then
+    if [ "$CONTENT_LENGTH" -gt 0 ]; then
+      FILE=`cat`
+      echo $FILE
+    fi
+fi
+echo '</body>'
+echo '</html>'
+
+exit 0
+
+
+===================
+sudo chmod +x /usr/lib/cgi-bin/upload.sh
+
+
+
+chmod 666 data.dat
+chmod o+w MwPSiS-projekt
+
+
+
+
+
