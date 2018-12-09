@@ -12,17 +12,17 @@ set E, default {1..E_count};
 set D, default {1..D_count};
 
 /* Requirements */
-param h{d in D} >= 0;
-param s{d in D} >= 0;
-param t{d in D} >= 0;
-param b{d in D} >= 0;
+param h{d in D} >= 0,integer;
+param s{d in D} >= 0,integer;
+param t{d in D} >= 0,integer;
+param b{d in D} >= 0,integer;
 
 /* Aev, Bev as params */
 param A{e in E, v in V}, >= 0, default 0;
 param B{e in E, v in V}, >= 0, default 0;
 
 /* Capacity */
-param c{e in E} >= 0, default 1;   /*  -  ilość biletów dostepnych(dodac do data)*/
+param c{e in E} >= 0, default 1,integer;   /*  -  ilość biletów dostepnych(dodac do data)*/
 
 /* KSI*/
 param KSI{e in E} >= 0;
@@ -30,8 +30,8 @@ param KSI{e in E} >= 0;
 param KSI_P{e in E} >=0;
 
 /* Decision variables */
-var x{e in E, d in D} >= 0;    /*  - ilosc wykorzystanego capacity dla kazdego z łuków*/
-var y{e in E, d in D} >= 0;                               /*  - tablica ile kazdy z przeplywow wykorzystuje na danym laczu*/
+var x{e in E, d in D} >=0, integer;    /*  - ilosc wykorzystanego capacity dla kazdego z łuków*/
+var y{e in E, d in D} >=0, integer;                               /*  - tablica ile kazdy z przeplywow wykorzystuje na danym laczu*/
 
 /* Objective function 'z' */
 minimize z: sum{e in E} (KSI[e]*(sum{d in D} x[e,d])+KSI_P[e]*(sum{d in D} y[e,d])); /* - u nas bez zmian*/
