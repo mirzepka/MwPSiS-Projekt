@@ -19,7 +19,7 @@ int main( int argc, char *argv[] )
 
 	if ( argc < 2 )
 	{
-		printf( "Usage: ./solve_gmpl <gmpl-model-file> [ <gmpl-data-file> ]\n" );
+		//printf( "Usage: ./solve_gmpl <gmpl-model-file> [ <gmpl-data-file> ]\n" );
 
 		return 1;
 	}
@@ -35,39 +35,47 @@ int main( int argc, char *argv[] )
 	
 	if ( status != 0 )
 	{
-		printf( "E: Failed to load the model and data files\n" );
+		//printf( "E: Failed to load the model and data files\n" );
 		
 		return 1;
 	}
 	
 	model.setLogLevel( 2 );
 	status = model.primal();
-	printf( "----------------------------------------\n" );
+	//printf( "----------------------------------------\n" );
 
 	int iterations_count = model.numberIterations();
-	printf( "Model status after %d iterations: %d (0: optimal, 1: primal infeasible, 2: dual infeasible, 3: stopped on iterations, 4: stopped due to errors)\n", iterations_count, status );
+	//printf( "Model status after %d iterations: %d (0: optimal, 1: primal infeasible, 2: dual infeasible, 3: stopped on iterations, 4: stopped due to errors)\n", iterations_count, status );
 
 	if ( model.primalFeasible() == false )
 	{
-		printf( "PRIMAL INFEASIBLE!\n" );
+		printf( "FINAL_LOG:PRIMAL INFEASIBLE!\n" );
 		
 		return 0;
 	}
 	
-	printf( "PRIMAL FEASIBLE! Objective value = %g\n", model.objectiveValue() );
+	printf( "FINAL_LOG:PRIMAL FEASIBLE! Objective value = %g\n", model.objectiveValue() );
 
 	int rows_count = model.numberRows();
 	int columns_count = model.numberColumns();
 	
-	printf( "The model has %d rows and %d columns.\n", rows_count, columns_count );
+	//printf( "The model has %d rows and %d columns.\n", rows_count, columns_count );
 	
 	double *column_primal = model.primalColumnSolution();
 	int i;
 
-	for ( i = columns_count; i > 0; i-- )
+	for ( i = 0; i < columns_count; ++i )
 	{
-		printf( "y[%d] = %g\n", columns_count - i + 1, column_primal[ i - 1 ] );
+		if(i == 0)
+			printf("FINAL_LOG:Reqular Tickets:\n");
+		if(i == (columns_count/2))
+			printf("FINAL_LOG:Premium Tickets:\n");
+		printf( "FINAL_LOG:e[%d] = %g\n", (i + 1)%(columns_count/2+1), column_primal[ i ] );
 	}
+//	for ( i = 0; i < columns_count; ++i )
+//	{
+//		printf( "y[%d] = %g\n", i + 1, column_primal[ i ] );
+//	}
 
 	return 0;
 }
