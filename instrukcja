@@ -42,7 +42,12 @@ echo '<body>'
   else
      # No looping this time, just extract the data you are looking for with sed:
      YY=`echo "$QUERY_STRING" | sed -n 's/^.*val_y=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
-     source /home/pat/MwPSiS-projekt/setup.sh "$YY"
+     NUM=`ps aux | grep "./solve_gmpl" | wc -l`
+     if [ "$NUM" -ge 2 ] ; then
+       echo "Solver has been already launched!"
+     else
+       source /home/pat/MwPSiS-projekt/setup.sh "$YY"
+     fi
   fi
 echo '</body>'
 echo '</html>'
