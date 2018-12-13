@@ -99,6 +99,50 @@ chmod 666 data.dat
 chmod o+w MwPSiS-projekt
 
 
+================================
+NAJNOWSZE
+
+ftp://ftp.gnu.org/gnu/cgicc/
+pobrac cgicc-3.2.15.tar.gz
+tar xzf cgicc-3.2.15.tar.gz
+cd cgicc-3.2.15.tar.gz
+./configure --prefix=/usr
+sudo make install
+
+
+
+sudo vim /var/www/html/cgi.html
+<html>
+<head><title>Projekt - samolotowe podroze sluzbowe</title></head>
+<body bgcolor="#cccccc" text="#000000">
+<h2>Projekt - samolotowe podroze sluzbowe</h2>
+<p>
+<form method="post" action="/cgi-bin/cgi">
+Liczba lotnisk :
+<input type="text" name="value1">
+
+<p>
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+ 
+
+
+=================
+do repo dodalem plik cgi.cpp trzeba zbudowac i skopiowac (trzeba zmienic sciezke na swoja string command = "/home/pat/MwPSiS-projekt/setup.sh";)
+
+g++ -o cgi cgi.cpp /usr/lib/libcgicc.a
+sudo cp cgi /usr/lib/cgi-bin
+
+
+odpalic stronke
+http://localhost/cgi.html
+
+
+
+
+
 
 
 
