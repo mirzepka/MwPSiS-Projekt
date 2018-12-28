@@ -70,7 +70,8 @@ int main( int argc, char *argv[] )
 			printf("FINAL_LOG:Reqular Tickets:\n");
 		if(i == (columns_count/2))
 			printf("FINAL_LOG:Premium Tickets:\n");
-		printf( "FINAL_LOG:e[%d] = %g\n", (i + 1)%(columns_count/2+1), column_primal[ i ] );
+    if ((int)column_primal[ i ] != 0)
+		  printf( "FINAL_LOG:e[%d] = %d\n", (i + 1)%(columns_count/2+1), (int)column_primal[ i ] );
 	}
 //	for ( i = 0; i < columns_count; ++i )
 //	{
