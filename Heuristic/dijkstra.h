@@ -10,7 +10,6 @@ class Graph {
 private:
     std::pair<Costs, int> **adjMatrix;
     int vertexCount;
-    // below attributes are for Prims
 
     int *key;
     int *distance;
@@ -26,7 +25,7 @@ public:
     void initializeState();
     std::deque<int> printPath(int j);
     void showBasicInfo();
-    void Dijkstra(int startNode, bool premiumTicket);
+    bool Dijkstra(int startNode, bool premiumTicket);
     int isAllKeyTrue();  //0 means not MST, 1 means MST
     int findMinDistanceNode();
     int bookTicket(int startNode, int destinationNode, bool premiumTicket = false);

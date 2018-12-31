@@ -24,9 +24,7 @@ int main(int argc, char** argv)
     }
     auto & edges = parser.getEdges();
     auto & demands= parser.getDemands();
-//    int numOfEdges = parser.getNumberOfEdges();
     int numOfNodes = parser.getNumberOfNodes();
-//    int numOfDemands = parser.getNumberOfDemands();
 
     for_each(edges.begin(), edges.end(), [](pair<const int, Edge> & el){ cout << el.second.print(); });
 
@@ -41,6 +39,11 @@ int main(int argc, char** argv)
         for(int ticket = 0; ticket < demand->peop; ++ticket)
 	{
             int re = g.bookTicket(demand->start, demand->dest, ticket < demand->prem);
+	    if (re == 0xffff)
+	    {
+                cout << "Forced to quit!" << endl;
+		return 0;
+	    }
 	    cout<<"TicketsCosts: "<< re<< endl;
 	    totalCost += re;
 	}

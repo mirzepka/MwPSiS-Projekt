@@ -24,6 +24,9 @@ Graph::Graph(int vertexCount) {
     }
 }
 Graph::~Graph() {
+    delete [] this->key;
+    delete [] this->distance;
+    delete [] this->parent;
     for (int i = 0; i < vertexCount; i++)
          delete[] adjMatrix[i];
             delete[] adjMatrix;
@@ -63,23 +66,25 @@ int Graph::isEdge(int i, int j) {
     }
 }
 void Graph::display(){
+    return; //for debugging
+
     int  u,v; //vertex
-    cout<<"Costs      ";
+    cout<<"Costs       ";
     for(u=0; u<vertexCount; u++){
-        cout << setw(2) << u << " ";
+        cout << setw(2) << u + 1 << " ";
     }
     for(u=0; u<vertexCount; u++) {
-        cout << "\nNode[" << (char) (u+48) << "] -> ";
+        cout << "\nNode[" << setw(2) << u + 1 << "] -> ";
         for(v=0; v<vertexCount; ++v) {
             cout << setw(2) << adjMatrix[u][v].first.regularCost << " " ;
         }
     }
-    cout<<"\n\nTickets    ";
+    cout<<"\n\nTickets     ";
     for(u=0; u<vertexCount; u++){
-        cout << setw(2) << u << " ";
+        cout << setw(2) << u + 1 << " ";
     }
     for(u=0; u<vertexCount; u++) {
-        cout << "\nNode[" << (char) (u+48) << "] -> ";
+        cout << "\nNode[" << setw(2) << u + 1 << "] -> ";
         for(v=0; v<vertexCount; ++v) {
             cout << setw(2) << adjMatrix[u][v].second << " " ;
         }
@@ -119,7 +124,11 @@ int Graph::bookTicket(int startNode, int destinationNode, bool premiumTicket)
 {
     int ticketsCost = 0;
     display();
-    Dijkstra(startNode, premiumTicket);
+    bool res = Dijkstra(startNode, premiumTicket);
+    if ( !res )
+    {
+        return 0xffff;
+    }
 
     deque<int> v = printPath(destinationNode);
 
@@ -145,13 +154,13 @@ deque<int> Graph::printPath(int j)
         return deque<int>();
     }
 
-    cout << "Travel cost to Node:" << j << " is " << distance[j] << endl;
+    cout << "Travel cost to Node:" << j + 1 << " is " << distance[j] << endl;
 
     deque<int> v = printPath(parent[j]);
     v.push_back(j);
     return v;
 }
-void Graph::Dijkstra(int startNode, bool premiumTicket){
+bool Graph::Dijkstra(int startNode, bool premiumTicket){
     for(int i = 0; i < vertexCount; ++i) // not sure if needed
     {
         this->key[i] = 0;
@@ -168,6 +177,11 @@ void Graph::Dijkstra(int startNode, bool premiumTicket){
     while(!this->isAllKeyTrue()){
         //cout<<"-------------------------------\n";
         minDistanceNode = findMinDistanceNode();
+	if (minDistanceNode < 0)
+	{
+	    cout << "Heuristic: Infeasible problem" << endl;
+            return false;
+	}
         this->key[minDistanceNode] = 1;  // this node's shortes path is done
 
 //        cout<<"Shortest Path: "<<this->parent[minDistanceNode]<<"->"
@@ -201,7 +215,7 @@ void Graph::Dijkstra(int startNode, bool premiumTicket){
         //this->showBasicInfo(); // To visualize more clearly
         // you can comment this to only show the edges of MST
     }
-
+    return true;
 }
 
 

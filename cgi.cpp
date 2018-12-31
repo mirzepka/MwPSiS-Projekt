@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
        form_iterator fvalue1 = formData.getElement("value1");
        if( !fvalue1->isEmpty() && fvalue1 != (*formData).end()) {
-	  string command = "/home/pat/MwPSiS-projekt/setup.sh";
+	  string command = "/home/mi/Desktop/mpsis/MwPSiS-Projekt/setup.sh";
 	  command = command + " "  + **fvalue1;
 	  system(command.c_str());
        }

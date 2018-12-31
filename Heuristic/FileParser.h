@@ -12,7 +12,6 @@ struct Edge
     int ksi;//cost
     int ksi_p;//cost premium
     int capa;//capa
-//Edge(int st, int dst, int ks, int cap):
     Edge(const Edge &) = default;
     Edge(int st, int dst, int ks, int ks_p, int cap):
 	    s(st),

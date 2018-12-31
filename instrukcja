@@ -1,69 +1,21 @@
+#Instrukcja
+
+#uruchom ponizsza komende w katalogu projektowym, a nastepnie uruchom ponownie ten plik:
+path=$(echo $PWD | sed "s/\//\\\ \//g" | sed "s/ //g") ; find . -type f -print0 | xargs -0 sed -i "s/\/home\/pat\/MwPSiS-projekt/$path/g"
+
+#zbuduj wszystkie Makefile w projekcie:
+#./Heuristic/Makefile
+#./Makefile
+#./ModelDataGenerator/Makefile
+
 sudo apt-get install apache2
 sudo apt-get install curl
 cd /etc/apache2/mods-enabled
 sudo ln -s ../mods-available/cgi.load
 sudo service apache2 reload
-sudo vim /usr/lib/cgi-bin/mwpsis.sh
-wkleic
-
-#!/bin/bash
-
-echo "Content-type: text/html"
-echo ""
-
-echo '<html>'
-echo '<head>'
-echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-echo '<title>Form Example</title>'
-echo '</head>'
-echo '<body>'
-
-  echo "<form method=GET action=\"${SCRIPT}\">"\
-       '<table nowrap>'\
-          '<tr><td>Liczba lotnisk</td><td><input type="text" name="val_y" size=12 value=""></td>'\
-          '</tr></table>'
-
-  echo '<br><input type="submit" value="Start">'\
-       '<input type="reset" value="Reset"></form>'
-
-  # Make sure we have been invoked properly.
-
-  if [ "$REQUEST_METHOD" != "GET" ]; then
-        echo "<hr>Script Error:"\
-             "<br>Usage error, cannot complete request, REQUEST_METHOD!=GET."\
-             "<br>Check your FORM declaration and be sure to use METHOD=\"GET\".<hr>"
-        exit 1
-  fi
-
-  # If no search arguments, exit gracefully now.
-
-  if [ -z "$QUERY_STRING" ]; then
-        exit 0
-  else
-     # No looping this time, just extract the data you are looking for with sed:
-     YY=`echo "$QUERY_STRING" | sed -n 's/^.*val_y=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
-     NUM=`ps aux | grep "./solve_gmpl" | wc -l`
-     if [ "$NUM" -ge 2 ] ; then
-       echo "Solver has been already launched!"
-     else
-       source /home/pat/MwPSiS-projekt/setup.sh "$YY"
-     fi
-  fi
-echo '</body>'
-echo '</html>'
-
-exit 0
-
-====================================
-
-sudo chmod +x /usr/lib/cgi-bin/mwpsis.sh
-
-w przegladarce:
-http://127.0.0.1/cgi-bin/mwpsis.sh
 
 
-
-sudo vim /usr/lib/cgi-bin/upload.sh
+sudo vim /usr/lib/cgi-bin/upload.sh #Wkleic ponizsze
 
 #!/bin/bash
 
@@ -100,10 +52,9 @@ chmod o+w MwPSiS-projekt
 
 
 ================================
-NAJNOWSZE
 
-ftp://ftp.gnu.org/gnu/cgicc/
-pobrac cgicc-3.2.15.tar.gz
+#pobrac cgicc-3.2.15.tar.gz
+wget ftp://ftp.gnu.org/gnu/cgicc/cgicc-3.2.15.tar.gz
 tar xzf cgicc-3.2.15.tar.gz
 cd cgicc-3.2.15.tar.gz
 ./configure --prefix=/usr
@@ -111,14 +62,15 @@ sudo make install
 
 
 
-sudo vim /var/www/html/cgi.html
+sudo vim /var/www/html/cgi.html #Wkleic ponizsze:
+
 <html>
 <head><title>Projekt - samolotowe podroze sluzbowe</title></head>
 <body bgcolor="#cccccc" text="#000000">
 <h2>Projekt - samolotowe podroze sluzbowe</h2>
 <p>
 <form method="post" action="/cgi-bin/cgi">
-Liczba lotnisk :
+Liczba zapotrzebowan (liczba lotnisk = zapotrzebowania^2, liczba pasazerow = 2*zapotrzebowania):<br>
 <input type="text" name="value1">
 
 <p>
@@ -130,13 +82,12 @@ Liczba lotnisk :
 
 
 =================
-do repo dodalem plik cgi.cpp trzeba zbudowac i skopiowac (trzeba zmienic sciezke na swoja string command = "/home/pat/MwPSiS-projekt/setup.sh";)
 
 g++ -o cgi cgi.cpp /usr/lib/libcgicc.a
 sudo cp cgi /usr/lib/cgi-bin
 
 
-odpalic stronke
+#odpalic strone
 http://localhost/cgi.html
 
 
